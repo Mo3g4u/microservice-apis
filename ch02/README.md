@@ -21,3 +21,5 @@ pipenv shell # 仮装環境をアクティブ化
 ```
 uvicorn orders.app:app --reload
 ```
+
+http://127.0.0.1:8000/docs

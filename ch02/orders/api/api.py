@@ -6,6 +6,9 @@ from starlette import status
 
 from orders.app import app
 
+# pydantic モデルをインポートし、検証に使えるようにする
+from orders.api.schemas import CreateOrderSchema
+
 # レスポンスで返す注文オブジェクトを定義
 orders = {
     'id': 'ff0f1355-e821-4178-9567-550dec27a373',
@@ -27,7 +30,8 @@ def get_orders():
 
 # レスポンスのステータスコートが 201 (Created) であることを指定
 @app.post('/orders', status_code=status.HTTP_201_CREATED)
-def create_order():
+# ペイロードを関数のパラメータとして宣言することでインターセプトし、型ヒントを使って検証
+def create_order(order_details: CreateOrderSchema):
     return orders
 
 # order_id などの URL パラメータを波かっこで囲んで定義
@@ -36,7 +40,7 @@ def get_order(order_id: UUID): # URL パラメータを関数の引数として�
     return orders
 
 @app.put('/orders/{order_id}')
-def update_order(order_id: UUID):
+def update_order(order_id: UUID, order_details: CreateOrderSchema):
     return orders
 
 @app.delete('/orders/{order_id}', status_code=status.HTTP_204_NO_CONTENT)
